@@ -12,7 +12,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.navigationBarsPadding
 
 @Composable
-fun BottomNavScreen() {
+fun BottomNavScreen(
+    isDarkMode: Boolean,
+    onDarkModeChange: (Boolean) -> Unit
+) {
     var selectedItem by remember { mutableStateOf("home") }
 
     Scaffold(
@@ -21,7 +24,7 @@ fun BottomNavScreen() {
             NavigationBar(
                 containerColor = Color(0xFFFD5930),
                 contentColor = Color.White,
-                modifier = Modifier.navigationBarsPadding() // avoids system nav bar overlap
+
             ) {
                 NavigationBarItem(
                     selected = selectedItem == "home",
@@ -57,12 +60,16 @@ fun BottomNavScreen() {
         val contentModifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
+
         when (selectedItem) {
             "home" -> Home(modifier = contentModifier)
             "reports" -> ReportsScreen(modifier = contentModifier)
             "budgets" -> BudgetsScreen(modifier = contentModifier)
-            "settings" -> SettingsScreen(modifier = contentModifier)
+            "settings" -> SettingsScreen(
+                modifier = contentModifier,
+                isDarkMode = isDarkMode,
+                onDarkModeChange = onDarkModeChange
+            )
         }
     }
 }
-

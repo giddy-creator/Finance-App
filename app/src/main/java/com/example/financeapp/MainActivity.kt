@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.financeapp.ui.theme.FinanceAppTheme
 
@@ -14,17 +14,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            FinanceAppTheme {
-                AppNavigation()   // your navigation handles moving from Register -> Main
+            var isDarkMode by remember { mutableStateOf(false) }
+
+            FinanceAppTheme(darkTheme = isDarkMode) {
+                AppNavigation(
+                    isDarkMode = isDarkMode,
+                    onDarkModeChange = { newMode -> isDarkMode = newMode }
+                )
             }
         }
     }
 }
 
 @Composable
-fun MainActivityScreen() {
-    // Show your existing BottomNavScreen
-    BottomNavScreen()
+fun MainActivityScreen(
+    isDarkMode: Boolean,
+    onDarkModeChange: (Boolean) -> Unit
+) {
+    BottomNavScreen(
+        isDarkMode = isDarkMode,
+        onDarkModeChange = onDarkModeChange
+    )
 }
 
 @Composable

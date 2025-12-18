@@ -1,33 +1,41 @@
 package com.example.financeapp
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
-import com.example.financeapp.RegistrationScreen
-import com.example.financeapp.MainActivityScreen
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    isDarkMode: Boolean,
+    onDarkModeChange: (Boolean) -> Unit
+) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "register") {
-
-        // LOGIN SCREEN
         composable("register") {
             RegistrationScreen(
                 onLoginSuccess = {
                     navController.navigate("main") {
-                        popUpTo("register") { inclusive = true }   // remove login from backstack
+                        popUpTo("register") { inclusive = true }
                     }
                 }
             )
         }
 
-        // MAIN SCREEN (contains bottom navigation)
         composable("main") {
-            MainActivityScreen()   // <--- bottom navigation is here
+            BottomNavScreen(isDarkMode = isDarkMode,
+                onDarkModeChange = onDarkModeChange)
+        }
+
+        composable("settings") {
+            SettingsScreen(
+                modifier = Modifier.fillMaxSize(),
+                isDarkMode = isDarkMode,
+                onDarkModeChange = onDarkModeChange
+            )
         }
     }
 }
